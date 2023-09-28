@@ -1,5 +1,14 @@
-var builder = WebApplication.CreateBuilder(args);
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Libary.Business.DependencyResolvers;
 
+var builder = WebApplication.CreateBuilder(args);
+#region Autofac
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory()).ConfigureContainer<ContainerBuilder>(builder =>
+{
+builder.RegisterModule(new AutofacBusinessModule());
+}); 
+#endregion
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

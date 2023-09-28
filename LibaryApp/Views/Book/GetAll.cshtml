@@ -1,0 +1,33 @@
+﻿@using LibaryApp.Entity.Dtos.BookDtos
+@model List<ListBookDto>
+@{
+    ViewData["Title"] = "GetAll";
+}
+
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Kitap</th>
+            <th scope="col">Yazar</th>
+            <th scope="col">Resim</th>
+            <th scope="col">Durum</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var books in Model)
+        {
+            <tr>
+                <td>@books.Number</td>
+                <td>@books.BookName</td>
+                <td>@books.Author</td>
+                <td>@books.Image</td>
+                <td>@books.InLibary</td>
+            </tr>
+        }
+
+      
+    </tbody>
+</table>
+<a href="/Book/Add/" class="btn btn-primary"> Kitap Ekle</a>
