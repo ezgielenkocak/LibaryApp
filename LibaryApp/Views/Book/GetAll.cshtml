@@ -11,60 +11,72 @@
         pointer-events: none; /* Butona tıklama olaylarını devre dışı bırakır */
         opacity: 0.6; /* Butonun opaklığını azaltır, tıklanamaz gibi görünmesini sağlar */
     }
+
+    .book-info {
+        vertical-align: middle;
+        text-align:center;}
+    .borrow-btn{
+        margin-top: 30px;
+    }
 </style>
 <table id="bookTable" class="table">
     <thead class="thead-dark">
         <tr>
-            <th></th>
-            <th>Kitap</th>
-            <th>Yazar</th>
-            <th>Resim</th>
-            <th>Durum</th>
-            <th></th>
-            <th>Alanın İsmi</th>
-            <th>Getireceği Tarih</th>
+            <th class="book-info"></th>
+            <th class="book-info">Resim</th>
+            <th class="book-info">Kitap</th>
+            <th class="book-info">Yazar</th>
+            <th class="book-info">Durum</th>
+            <th class="book-info"></th>
+            <th class="book-info">Alanın İsmi</th>
+            <th class="book-info">Getireceği Tarih</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var books in Model)
         {
             <tr>
-                <td>@books.Number</td>
-                <td>@books.BookName</td>
-                <td>@books.Author</td>
-                <td>
-                    <img src="/wwwroot/images/@books.Image" alt="Kitap Resmi" class="img-thumbnail" />
+                <td class="book-info">@books.Number</td>
+                <td class="book-info">
+                    <img src="~/images/@books.Image" alt="Kitap Resmi" style="width: 100px; height: 100px; class="img-thumbnail" />
                 </td>
-                <td>@books.InLibary</td>
+
+                <td class="book-info">@books.BookName</td>
+                <td class="book-info">@books.Author</td>
+
+                <td class="book-info">@books.InLibary</td>
                 <td>
                     @if (books.InLibary == "Dışarıda")
                     {
-                        <div>
+                        <div class="book-info">
                             @using (Html.BeginForm("AddBorrowerBook", "BorrowerBooks", FormMethod.Get))
                             {
                                 @Html.Hidden("bookId", books.Id)
-                                <button class="btn btn-success disabled-button" type="button">Ödünç Ver</button>
+                                <button class="btn btn-success disabled-button borrow-btn" type="button">Ödünç Ver</button>
                             }
                         </div>
-                    <td>Ezgi Elen Koçak</td>
-                    <td>09.09.2023</td>
+                    <td class="book-info">Ezgi Elen Koçak</td>
+                    <td class="book-info">09.09.2023</td>
                     }
                     else
                     {
-                    <div>
+                    <div class="book-info">
                             @using (Html.BeginForm("AddBorrowerBook", "BorrowerBooks", FormMethod.Get))
                             {
                                 @Html.Hidden("bookId", books.Id)
-                            <button class="btn btn-success">Ödünç Ver</button>
+                            <button class="btn btn-success borrow-btn">Ödünç Ver</button>
                             }
                     </div>
+
+                    <td class="book-info">#</td>
+                    <td class="book-info">#</td>
                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
-<a href="/Book/Add/" class="btn btn-primary"> Kitap Ekle</a>
+<a href="/Book/Add/" class="btn btn-primary" style="margin-top: 30px"> Kitap Ekle</a>
 
 <script>
     $(document).ready(function () {

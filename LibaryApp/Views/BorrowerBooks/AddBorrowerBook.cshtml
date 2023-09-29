@@ -7,7 +7,7 @@
     <div>
 
         <label>Ödünç Alan Ad</label>
-        @Html.ValidationMessageFor(x=>x.BorrowersName, "", new{@style="color:red"})
+        @Html.ValidationMessageFor(x=>x.BorrowersName, "Ödünç alanın ismi zorunludur", new{@style="color:red"})
         <input type="text" class="form-control" name="BorrowersName" />
 
         <label>Kitap Id</label>
