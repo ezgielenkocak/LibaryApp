@@ -15,5 +15,6 @@ namespace LibaryApp.Dal.Context
             optionsBuilder.UseSqlServer("server=DESKTOP-VTNRLAJ; database=LibaryDb; integrated security=true");
         }
        public DbSet<Book> Books { get; set; }
+        public DbSet<BorrowerBook> BorrowerBooks { get; set; }
     }
 }

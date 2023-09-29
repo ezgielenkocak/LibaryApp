@@ -12,6 +12,7 @@ namespace LibaryApp.Core.Repository
     {
         T Get(Expression<Func<T, bool>> filter = null);
         IList<T> GetList(Expression<Func<T, bool>> filter = null);
+        void Update(T entity);
 
         void Add(T entity);
     }

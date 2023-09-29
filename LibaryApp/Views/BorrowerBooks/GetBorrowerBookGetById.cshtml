@@ -1,0 +1,11 @@
+﻿@model LibaryApp.Entity.Concrete.BorrowerBook
+@{
+    ViewBag.Title = "GetBorrowerBookGetById";
+}
+
+@using (Html.BeginForm("GetBorrowerBookGetById", "BorrowerBooks", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(x=>x.BookId)
+    </div>
+}

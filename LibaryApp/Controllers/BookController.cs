@@ -18,10 +18,30 @@ namespace LibaryApp.Controllers
             var result=_bookService.GetBooks();   
             return View(result.Data);
         }
-        public IActionResult Add(AddBookDto dto)
-        { 
-            var result=_bookService.AddBook(dto);
+        public IActionResult GetBooksOutside()
+        {
+            var result=_bookService.GetBooksOutside();  
             return View(result.Data);
+        }
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+         
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Add(AddBookDto dto, IFormFile image)
+        { 
+            var result=_bookService.AddBook(dto, image);
+            return View(result.Data);
+        }
+
+        [HttpGet]
+        public IActionResult GetBookById(int id)
+        {
+            var result=_bookService.GetBookById(id);
+            return View("GetBookById",result.Data);
         }
     }
 }

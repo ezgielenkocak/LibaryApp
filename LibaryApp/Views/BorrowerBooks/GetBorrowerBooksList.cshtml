@@ -1,0 +1,30 @@
+﻿@using LibaryApp.Entity.Dtos.BorrowerBookDtos
+@model List<ListBorrowerBooksDto>
+@{
+    ViewData["Title"] = "GetBorrowerBooksList";
+}
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Kitap</th>
+            <th scope="col"> Ödünç Alan</th>
+            <th scope="col"> Geri Getireceği Tarih</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td></td>
+                <td>@item.BookName</td>
+                <td>@item.BorrowersName</td>
+                <td>@item.ReturnDate</td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>

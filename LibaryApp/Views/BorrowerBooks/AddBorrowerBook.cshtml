@@ -1,0 +1,22 @@
+﻿@model LibaryApp.Entity.Dtos.BorrowerBookDtos.AddBorrowerBooksDto
+@{
+    ViewBag.Title = "AddBorrowerBook";
+}
+
+<form class="form-group" method="post">
+    <div>
+
+        <label>Ödünç Alan Ad</label>
+        @Html.ValidationMessageFor(x=>x.BorrowersName, "", new{@style="color:red"})
+        <input type="text" class="form-control" name="BorrowersName" />
+
+        <label>Kitap Id</label>
+        <input type="text" class="form-control" name="BookId" value="@Model.BookId" readonly />
+
+        <label>Geri Getirme Tarihi</label>
+        <input type="datetime" class="form-control" name="ReturnDate" />
+    </div>
+    <div style="margin-top: 15px">
+        <button class="btn btn-info">Ödünç Ver</button>
+    </div>
+</form>

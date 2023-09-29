@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 
 namespace LibaryApp.Entity.Concrete
 {
-    public class Book:IEntity
+    public class BorrowerBook:IEntity
     {
         public int Id { get; set; }
-        public string BookName { get; set; }
-        public string Author { get; set; }
-        public string Image { get; set; }
-        public bool InLibary { get; set; }
-        public DateTime CreatedDate { get; set; }
+        [Required]
+        public string BorrowersName { get; set; }
+        public int BookId { get; set; }
+        public DateTime ReturnDate { get; set; }
     }
 }

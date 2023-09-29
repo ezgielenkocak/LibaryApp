@@ -17,6 +17,9 @@ namespace Libary.Business.DependencyResolvers
         {
             builder.RegisterType<EfBookDal>().As<IBookDal>();
             builder.RegisterType<BookManager>().As<IBookService>();
+
+            builder.RegisterType<EfBorrowerBooksDal>().As<IBorrowBooksDal>();  
+            builder.RegisterType<BorrowerBooksManager>().As<IBorrowerBooksService>();   
         }
     }
 }
