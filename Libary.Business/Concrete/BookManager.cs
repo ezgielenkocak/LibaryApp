@@ -12,9 +12,11 @@ namespace Libary.Business.Concrete
     public class BookManager : IBookService
     {
         private readonly IBookDal _bookDal;
-        public BookManager(IBookDal bookDal)
+        private readonly IBorrowBooksDal _borrowBooksDal;
+        public BookManager(IBookDal bookDal, IBorrowBooksDal borrowBooksDal)
         {
             _bookDal = bookDal;
+            _borrowBooksDal = borrowBooksDal;
         }
 
         public IDataResult<Book> AddBook(AddBookDto dto, IFormFile image)
@@ -113,17 +115,37 @@ namespace Libary.Business.Concrete
                 foreach (var book in books)
                 {
                     string state = book.InLibary ? "Kütüphanede" : "Dışarıda";
+                    var borrowBook = _borrowBooksDal.Get(x => x.BookId == book.Id);
 
-                    booksListDto.Add(new ListBookDto
+                    if (borrowBook ==null)
                     {
-                        Id = book.Id,
-                        BookName = book.BookName,
-                        Author = book.Author,
-                        Number = bookNumber,
-                        Image = book.Image,
-                        InLibary = state
+                        booksListDto.Add(new ListBookDto
+                        {
+                            Id = book.Id,
+                            BookName = book.BookName,
+                            Author = book.Author,
+                            Number = bookNumber,
+                            Image = book.Image,
+                            InLibary = state,
 
-                    });
+                        });
+                    }
+                    else
+                    {
+                        booksListDto.Add(new ListBookDto
+                        {
+                            Id = book.Id,
+                            BookName = book.BookName,
+                            Author = book.Author,
+                            Number = bookNumber,
+                            Image = book.Image,
+                            InLibary = state,
+                            BorrowersName=borrowBook.BorrowersName,
+                            ReturnDate=borrowBook.ReturnDate,
+                        });
+                    }
+               
+                  
                     bookNumber++;
                 }
                 return new SuccessDataResult<List<ListBookDto>>(booksListDto, "success", Messages.success);

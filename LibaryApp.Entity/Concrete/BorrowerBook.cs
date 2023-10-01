@@ -11,7 +11,6 @@ namespace LibaryApp.Entity.Concrete
     public class BorrowerBook:IEntity
     {
         public int Id { get; set; }
-        [Required]
         public string BorrowersName { get; set; }
         public int BookId { get; set; }
         public DateTime ReturnDate { get; set; }

@@ -1,6 +1,9 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Libary.Business.DependencyResolvers;
+using Serilog;
+using Serilog.Core;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 #region Autofac
@@ -11,6 +14,16 @@ builder.RegisterModule(new AutofacBusinessModule());
 #endregion
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+Logger log = new LoggerConfiguration()
+   .WriteTo.MSSqlServer(
+              connectionString: "server=DESKTOP-VTNRLAJ; database=LibaryDb; TrustServerCertificate=True;integrated security=true", // DbContext'ta tanýmlanan baðlantý dizesi
+              tableName: "logs",
+              autoCreateSqlTable: true)
+   .CreateLogger();
+
+builder.Host.UseSerilog(log);
+var cultureInfo = new CultureInfo("tr-TR");
 
 var app = builder.Build();
 
@@ -28,7 +41,6 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Book}/{action=GetAll}/{id?}");

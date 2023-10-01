@@ -12,7 +12,7 @@ namespace LibaryApp.Dal.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=DESKTOP-VTNRLAJ; database=LibaryDb; integrated security=true");
+            optionsBuilder.UseSqlServer("server=DESKTOP-VTNRLAJ; database=LibaryDb; TrustServerCertificate=True;integrated security=true");
         }
        public DbSet<Book> Books { get; set; }
         public DbSet<BorrowerBook> BorrowerBooks { get; set; }

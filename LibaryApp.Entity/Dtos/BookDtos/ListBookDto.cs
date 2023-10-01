@@ -15,5 +15,9 @@ namespace LibaryApp.Entity.Dtos.BookDtos
         public string Author { get; set; }
         public string Image { get; set; }
         public string InLibary { get; set; }
+
+        //Ödünç alanın ismi ve geri getireceği tarih.
+        public string? BorrowersName { get; set; } 
+        public DateTime? ReturnDate { get; set; }
     }
 }
