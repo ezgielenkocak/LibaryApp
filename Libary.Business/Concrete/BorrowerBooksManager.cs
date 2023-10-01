@@ -81,14 +81,14 @@ namespace Libary.Business.Concrete
             {
                 var borrowBooks = _borrowerBooksDal.GetList().OrderBy(x=>x.BorrowersName);
                 var borrowBooksListDto = new List<ListBorrowerBooksDto>();
-
                 int columnNumber = 1;
                 foreach (var item in borrowBooks)
                 {
                     var book = _booksDal.Get(x => x.Id == item.BookId);
+
                     borrowBooksListDto.Add(new ListBorrowerBooksDto
                     {
-                        Id = columnNumber,
+                        Number = columnNumber,
                         BookName = book.BookName,
                         BorrowersName = item.BorrowersName,
                         ReturnDate = item.ReturnDate,

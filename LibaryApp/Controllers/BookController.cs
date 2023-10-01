@@ -27,11 +27,7 @@ namespace LibaryApp.Controllers
             var result = _bookService.GetBooksOutside();
             return View(result.Data);
         }
-        [HttpGet]
-        public IActionResult AddNews()
-        {
-            return View();
-        }
+
         [HttpGet]
         public IActionResult Add()
         {
@@ -40,23 +36,23 @@ namespace LibaryApp.Controllers
         [HttpPost]
         public IActionResult Add(AddBookDto dto, IFormFile image)
         {
-            BookValidator bookValidator = new BookValidator();
-            ValidationResult results = bookValidator.Validate(dto);
-            if (results.IsValid)
-            {
+            //BookValidator bookValidator = new BookValidator();
+            //ValidationResult results = bookValidator.Validate(dto);
+            //if (results.IsValid)
+            //{
                 var result = _bookService.AddBook(dto, image);
                 return View(result.Data);
-            }
-            else
-            {
-                foreach (var item in results.Errors)
-                {
-                    string message = item.ErrorMessage;
-                    string keys = item.PropertyName;
-                    ModelState.AddModelError(keys, message);
-                }
-            }
-            return View();
+        //    }
+        //    else
+        //    {
+        //        foreach (var item in results.Errors)
+        //        {
+        //            string message = item.ErrorMessage;
+        //            string keys = item.PropertyName;
+        //            ModelState.AddModelError(keys, message);
+        //        }
+        //    }
+        //    return View();
         }
 
         [HttpGet]

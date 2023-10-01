@@ -10,6 +10,8 @@ namespace LibaryApp.Entity.Dtos.BorrowerBookDtos
     public class ListBorrowerBooksDto:IDto
     {
         public int Id { get; set; }
+        public string Image { get; set; }
+        public int Number { get; set; }
         public string BorrowersName { get; set; }
         public string BookName { get; set; }
         public DateTime ReturnDate { get; set; }

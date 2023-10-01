@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Libary.Business\Libary.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>
