@@ -2,7 +2,9 @@
 using Libary.Business.Abstract;
 using Libary.Business.ValidationRules;
 using LibaryApp.Core.Entities;
+using LibaryApp.Core.Result;
 using LibaryApp.Entity.Dtos.BookDtos;
+using LibaryApp.Entity.Dtos.BorrowerBookDtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -16,50 +18,41 @@ namespace LibaryApp.Controllers
         {
             _bookService = bookService;
         }
-
+   
         public IActionResult GetAll()
         {
             var result = _bookService.GetBooks();
             return View(result.Data);
         }
-        public IActionResult GetBooksOutside()
-        {
-            var result = _bookService.GetBooksOutside();
-            return View(result.Data);
-        }
-
+  
         [HttpGet]
         public IActionResult Add()
         {
             return View();
-        }
+        } 
         [HttpPost]
-        public IActionResult Add(AddBookDto dto, IFormFile image)
+        public IActionResult Add(AddBookDto dto, IFormFile image) //Kitap ekleme controller'ı
         {
-            //BookValidator bookValidator = new BookValidator();
-            //ValidationResult results = bookValidator.Validate(dto);
-            //if (results.IsValid)
-            //{
-                var result = _bookService.AddBook(dto, image);
-                return View(result.Data);
-        //    }
-        //    else
-        //    {
-        //        foreach (var item in results.Errors)
-        //        {
-        //            string message = item.ErrorMessage;
-        //            string keys = item.PropertyName;
-        //            ModelState.AddModelError(keys, message);
-        //        }
-        //    }
-        //    return View();
-        }
+            var result = _bookService.AddBook(dto, image);
+            if (result.Data ==null)
+            {
+                return View(dto);
+            }
+            return RedirectToAction("GetAll");
+        } 
+
 
         [HttpGet]
         public IActionResult GetBookById(int id)
         {
             var result = _bookService.GetBookById(id);
             return View("GetBookById", result.Data);
-        }
+        } //Ödünç verme işleminde otomatik olarak BookId'yi otomatik almamı sağlayan controllerım
+
+        public IActionResult GetActiveBooks()
+        {
+            var result = _bookService.GetActiveBooks();
+            return View(result.Data);
+        } //Kütüphanede aktif olan kitapları getiren Controller
     }
 }

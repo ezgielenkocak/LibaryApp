@@ -10,7 +10,6 @@ namespace LibaryApp.Entity.Dtos.BorrowerBookDtos
 {
     public class AddBorrowerBooksDto:IDto
     {
-        [Required]
         public string BorrowersName { get; set; }
         public int BookId { get; set; }
         public DateTime ReturnDate { get; set; }

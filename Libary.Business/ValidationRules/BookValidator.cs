@@ -13,10 +13,10 @@ namespace Libary.Business.ValidationRules
     {
         public BookValidator()
         {
-           RuleFor(x => x.BookName).NotEmpty().WithMessage("Lütfen bir kitap ismi giriniz");
-           
-            //RuleFor(x => x.Image).NotEmpty().WithMessage("Lütfen bir resim yükleyiniz");
-            //RuleFor(x => x.Author).NotEmpty().WithMessage("Lütfen bir yazar ismi giriniz");
+            //Kitap ekleme işlemi için validasyon işlemlerim;
+            RuleFor(x => x.BookName).NotEmpty().WithMessage("Lütfen bir kitap ismi giriniz");
+            RuleFor(x => x.Image).NotEmpty().WithMessage("Lütfen bir resim yükleyiniz");
+            RuleFor(x => x.Author).NotEmpty().WithMessage("Lütfen bir yazar ismi giriniz");
         }
     }
 }

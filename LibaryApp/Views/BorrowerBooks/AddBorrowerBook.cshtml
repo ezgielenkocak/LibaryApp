@@ -2,31 +2,25 @@
 @{
     ViewBag.Title = "AddBorrowerBook";
 }
-
-<@* form class="form-group" method="post">
-    <div>
-
-    
-
-        <label>Kitap Id</label>
-        <input type="text" class="form-control" name="BookId" value="@Model.BookId" readonly />
-
-        <label>Geri Getirme Tarihi</label>
-        <input type="datetime" class="form-control" name="ReturnDate" />
-    </div>
-    <div style="margin-top: 15px">
-        <button class="btn btn-info">Ödünç Ver</button>
-    </div>
-</form> *@
-
 <hr />
 <div class="giris">
     <div class="form">
          <form class="giris-from" method="post" enctype="multipart/form-data">
+               <b>Kitap Ödünç Verme Sayfası</b>
+         
+                <hr />
+                <br />
         <div class="">
-            <input type="text" name="BorrowersName" placeholder="Ödünç Alan" value="@Model.BorrowersName" />
-            <input type="text" name="BookId" placeholder="Kitap Id"  value="@Model.BookId" readonly/>
-            <input type="text" class="form-control-file" name="ReturnDate" placeholder="Geri Getirme Tarihi" />
+            <input type="text" placeholder="Ödünç Alan" name="BorrowersName"value="@Model.BorrowersName" />
+             <label type="text" style="color:red">  @Html.ValidationMessageFor(x=>x.BorrowersName) </label>
+             <br />
+            <input type="text"  placeholder="Kitap Id" name="BookId"  value="@Model.BookId" readonly/>
+
+            <input type="text" class="form-control-file" name="ReturnDate"  placeholder="Geri Getirme Tarihi" />
+                @Html.ValidationMessageFor(model => model.ReturnDate)
+
+            <label type="text" style="color:red">  @Html.ValidationMessageFor(x=>x.ReturnDate) </label>
+
         </div>
         <div style="margin-top:15px">
             <button type="submit" class="btn btn-info">Ödünç Ver</button>

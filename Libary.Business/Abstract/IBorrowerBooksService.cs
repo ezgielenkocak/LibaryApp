@@ -13,6 +13,5 @@ namespace Libary.Business.Abstract
     {
         IDataResult<BorrowerBook> AddBorrowerBook(AddBorrowerBooksDto addBorrowerBooksDto);
         IDataResult<List<ListBorrowerBooksDto>> GetBorrowerBooksList();
-        IDataResult<BorrowerBook> GetBorrowerBookGetById(int id);
     }
 }

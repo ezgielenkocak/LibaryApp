@@ -14,7 +14,7 @@ namespace LibaryApp.Controllers
         }
      
         [HttpGet]
-        public IActionResult GetBorrowerBooksList()
+        public IActionResult GetBorrowerBooksList() //Ödünç verilen kitaplar listesi controller'ı
         {
             var result=_borrowerBooksService.GetBorrowerBooksList();
             return View(result.Data);
@@ -32,20 +32,15 @@ namespace LibaryApp.Controllers
         [HttpPost]
         public IActionResult AddBorrowerBook(AddBorrowerBooksDto addBorrowerBooksDto)
         {
-            if (!ModelState.IsValid)
+            //Bugünün tarihinden daha küçük bir Geri Getirme Tarihi girilmemesi için yaptığım kontrol
+            if (addBorrowerBooksDto.ReturnDate < DateTime.Now.Date)
             {
-                return View("AdBorrowerBook");
+                ModelState.AddModelError("ReturnDate", "Geri getirme tarihi bugünden küçük olamaz.");
+                return View(addBorrowerBooksDto);
             }
             var result = _borrowerBooksService.AddBorrowerBook(addBorrowerBooksDto);
             return RedirectToAction("GetBorrowerBooksList");
         }
 
-        [HttpGet]
-        public IActionResult GetBorrowerBookGetById(int id)
-        {
-            var result = _borrowerBooksService.GetBorrowerBookGetById(id);
-            return View(result.Data);   
-        }
-      
     }
 }

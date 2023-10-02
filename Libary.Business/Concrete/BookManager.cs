@@ -19,27 +19,28 @@ namespace Libary.Business.Concrete
             _borrowBooksDal = borrowBooksDal;
         }
 
+        //Kitap Ekleme İşlemi
         public IDataResult<Book> AddBook(AddBookDto dto, IFormFile image)
         {
             try
             {
-                if (dto == null)
+                if (dto == null || image==null) //nesnelerin boş gelme durumunu kontrol ettim.
                 {
                     return new ErrorDataResult<Book>(null, "Data is null", Messages.err_null);
                 }
-                if (image != null && image.Length > 0)
+                if (image.Length > 0)
                 {
                     // Dosya adını ve yolunu oluşturdum
                     var uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
-                    var filePath = Path.Combine("wwwroot/images", uniqueFileName);
+                    var filePath = Path.Combine("wwwroot/images", uniqueFileName); //eklenen kitap resimlerinin roota eklenmesini sağladım
 
-                    // Dosya yükleme işlemi
+                    // Dosya yükleme işlemini yaptım
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         image.CopyTo(stream);
                     }
 
-                    // AddBookDto verilerini kullanarak Book nesnesi oluşturdum
+                    //mapleme işlemim
                     var book = new Book
                     {
                         BookName = dto.BookName,
@@ -62,7 +63,7 @@ namespace Libary.Business.Concrete
 
                 return new ErrorDataResult<Book>(null, e.Message, Messages.unk_err);
             }
-        }
+        } 
 
         public IDataResult<Book> Get(Expression<Func<Book, bool>> filter)
         {
@@ -79,6 +80,26 @@ namespace Libary.Business.Concrete
             {
 
                 return new ErrorDataResult<Book>(null, e.Message, Messages.unk_err);
+            }
+        } //diğer servisten veri çekerken kullandığım metodum
+
+        //Sadece kütüphanede bulunan kitapları(ödünç verilenleri görmüyor) listeleme işlemi
+        public IDataResult<List<Book>> GetActiveBooks()
+        {
+            try
+            {
+                var getActiveBooks = _bookDal.GetList().Where(x => x.InLibary == true ).OrderBy(x=>x.BookName).ToList(); //sadece kütüphanede olan kitapları getiriyorum. Alfabetik olarak yapmadım çünkü bu sefer kitap id'lerini göstermek istedim.
+                if (getActiveBooks==null)
+                {
+                    return new ErrorDataResult<List<Book>>(null, "err_null", Messages.err_null);
+                }
+                return new SuccessDataResult<List<Book>>(getActiveBooks, "Ok", Messages.success);
+            }
+            catch (Exception e)
+            {
+
+                return new ErrorDataResult<List<Book>>(null, e.Message, Messages.unk_err);
+
             }
         }
 
@@ -103,52 +124,79 @@ namespace Libary.Business.Concrete
 
                 return new ErrorDataResult<Book>(null, e.Message, Messages.unk_err);
             }
-        }
+        } //Ödünç verme işleminde kitap id'sinin otomatik olarak gitmesini sağlayan metodum
 
+        #region GetBooks Açıklama
+        /* Anasayfada gözüken kitap ismi, yazarı, resmi, ödünç alanıın ismi, geri getireceği tarih bilgilerini içeren iki tablodan veri çekip listelediğim metot
+         */
+        #endregion
         public IDataResult<List<ListBookDto>> GetBooks()
         {
             try
             {
+                #region books Değişkeni açıklama
+                //Kitapları alfabetik sıraya göre çektim
+                #endregion
                 var books = _bookDal.GetList().OrderBy(x => x.BookName).ToList();
-                int bookNumber = 1;
+
+                #region bookNumber değişkeni açıklama
+                // alfabetik sıralama yaptığım için db'den gelen Id'yi değil 1 den başlayıp aritmetik artan birnevi index görevi gören değişkenim.
+                #endregion
+                int bookNumber = 1; 
                 var booksListDto = new List<ListBookDto>();
-                foreach (var book in books)
+                if (books!=null)
                 {
-                    string state = book.InLibary ? "Kütüphanede" : "Dışarıda";
-                    var borrowBook = _borrowBooksDal.Get(x => x.BookId == book.Id);
-
-                    if (borrowBook ==null)
+                    foreach (var book in books)
                     {
-                        booksListDto.Add(new ListBookDto
-                        {
-                            Id = book.Id,
-                            BookName = book.BookName,
-                            Author = book.Author,
-                            Number = bookNumber,
-                            Image = book.Image,
-                            InLibary = state,
+                        #region state değişkeni açıklama
+                        // InLibary'yi true false yerine bu şekilde kullanmayı tercih ettim
+                        #endregion
+                        string state = book.InLibary ? "Kütüphanede" : "Dışarıda";
 
-                        });
-                    }
-                    else
-                    {
-                        booksListDto.Add(new ListBookDto
+                        #region borrowBook değişkeni açıklama
+                        //BorrowersBook(Ödünç Alınan kitaplar) tablosundaki Ödünç alan ve Geri getirme tarihini Books tablosuyla birleştirmek için yaptığım işlem
+                        #endregion
+                        var borrowBook = _borrowBooksDal.Get(x => x.BookId == book.Id);
+                        if (borrowBook == null)
                         {
-                            Id = book.Id,
-                            BookName = book.BookName,
-                            Author = book.Author,
-                            Number = bookNumber,
-                            Image = book.Image,
-                            InLibary = state,
-                            BorrowersName=borrowBook.BorrowersName,
-                            ReturnDate=borrowBook.ReturnDate,
-                        });
+                            if (book.InLibary==false)
+                            {
+                                BookAndBorroweBookControl(book);
+
+                            }
+                            booksListDto.Add(new ListBookDto
+                            {
+                                Id = book.Id,
+                                BookName = book.BookName,
+                                Author = book.Author,
+                                Number = bookNumber,
+                                Image = book.Image,
+                                InLibary = state,
+
+                            });
+                        }
+                        else
+                        {
+                            booksListDto.Add(new ListBookDto
+                            {
+                                Id = book.Id,
+                                BookName = book.BookName,
+                                Author = book.Author,
+                                Number = bookNumber,
+                                Image = book.Image,
+                                InLibary = state,
+                                BorrowersName = borrowBook.BorrowersName,
+                                ReturnDate = borrowBook.ReturnDate,
+                            });
+                        }
+                        bookNumber++; //indexleme görevi gören değişkenim
                     }
-               
-                  
-                    bookNumber++;
+                    return new SuccessDataResult<List<ListBookDto>>(booksListDto, "success", Messages.success);
+
                 }
-                return new SuccessDataResult<List<ListBookDto>>(booksListDto, "success", Messages.success);
+
+
+                return new ErrorDataResult<List<ListBookDto>>(null, "null", Messages.err_null);
             }
             catch (Exception e)
             {
@@ -157,34 +205,27 @@ namespace Libary.Business.Concrete
             }
         }
 
-        public IDataResult<List<ListBookDto>> GetBooksOutside()
+
+        #region BookAndBorroweBookControl Açıklama
+        //Silme ve güncelleme işlemlerinin logic'iğini yazmadığım için mesela Ödünç alınan kitaplar(BorrowerBook table) tablosuna truncate atıp Books tablosunda değişiklik yapmayı unutursam otomatik olarak Books tablosundaki InLibary(yani kütüphanede mi dışarıda mı ) değerini true'ya çekiyorum ki veri kaybı yaşanmasın.   (GetBooks metodunda kullandım)
+        #endregion
+        public bool BookAndBorroweBookControl(Book book)
         {
-            try
+            var checkBorrowerBookCount = _borrowBooksDal.GetList();
+            if (checkBorrowerBookCount.Count<=0)
             {
-                var books = _bookDal.GetList().OrderBy(x => x.BookName).Where(y => y.InLibary == false).ToList();
-                int bookNumber = 1;
-                var booksListDto = new List<ListBookDto>();
-                foreach (var book in books)
+                var bookControl = new Book()
                 {
-                    string state = book.InLibary ? "Kütüphanede" : "Dışarıda";
-                    booksListDto.Add(new ListBookDto
-                    {
-                        BookName = book.BookName,
-                        Author = book.Author,
-                        Number = bookNumber,
-                        Image = book.Image,
-                        InLibary = state
-
-                    });
-                    bookNumber++;
-                }
-                return new SuccessDataResult<List<ListBookDto>>(booksListDto, "success", Messages.success);
+                    Author = book.Author,
+                    BookName = book.BookName,
+                    Id = book.Id,
+                    Image = book.Image,
+                    InLibary = true,
+                    CreatedDate=book.CreatedDate,
+                };
+                _bookDal.Update(bookControl);  
             }
-            catch (Exception e)
-            {
-
-                return new ErrorDataResult<List<ListBookDto>>(null, e.Message, Messages.unk_err);
-            }
+            return true;
         }
     }
 }

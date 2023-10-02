@@ -13,11 +13,11 @@ namespace Libary.Business.Abstract
 {
     public interface IBookService
     {
-        IDataResult<Book> AddBook(AddBookDto dto, IFormFile image);
-        IDataResult<List<ListBookDto>> GetBooks();
-        IDataResult<List<ListBookDto>> GetBooksOutside();
-        IDataResult<Book> Get(Expression<Func<Book, bool>> filter);
-        IDataResult<Book> GetBookById(int id);
-        
+        IDataResult<Book> AddBook(AddBookDto dto, IFormFile image); //Kitap ekler
+        IDataResult<List<ListBookDto>> GetBooks(); //Anasayfadaki kitap bilgileri-ödünç alan- getireceği tarihi döner
+        IDataResult<Book> Get(Expression<Func<Book, bool>> filter); // linq expression yazarken kullanıyorum
+        IDataResult<Book> GetBookById(int id); //Ödünç ver kısmında kitabın id'sini otomatik olarak almamı sağlıyor
+        IDataResult<List<Book>> GetActiveBooks(); //sadece kütüphanede bulunan kitapları listeler.
+
     }
 }

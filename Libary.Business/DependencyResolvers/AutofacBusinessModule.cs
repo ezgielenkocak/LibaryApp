@@ -13,6 +13,7 @@ namespace Libary.Business.DependencyResolvers
 {
     public class AutofacBusinessModule:Module
     {
+        //Dependency Injection işleminin düzgün çalışması için bağımlılıkları programa bildirdim.
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<EfBookDal>().As<IBookDal>();

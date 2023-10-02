@@ -12,6 +12,5 @@ namespace LibaryApp.Entity.Dtos.BookDtos
         public string BookName { get; set; }
         public string Author { get; set; }
         public string Image { get; set; }
-        public bool InLibary { get; set; }
     }
 }
